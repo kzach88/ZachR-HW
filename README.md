@@ -446,4 +446,8 @@ ggplot(Observed_Het_per_locus_melt,aes(x = SNP_ID, y= value, fill=variable)) + g
 
 =======
 The graphs generated are located in outputGraphs
+<<<<<<< HEAD
 >>>>>>> edafa29eca68075fbea005bf968ed0d12fb290e2
+=======
+.
+>>>>>>> b95b0110ba021508dc5b0b0e8c633faca7fad423
