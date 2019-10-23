@@ -1,18 +1,10 @@
-# ZachR-HW
-# ZachR-HW
----
-title: "ALL r"
-author: "Zach"
-date: "October 18, 2019"
-output: html_document
----
+Containing all my R- assignment files 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+The Teosinte related files are contained in TeositeFiles
 
-## R Markdown
+The maize related filed are contained in MaizeFiles
 
+<<<<<<< HEAD
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
@@ -452,3 +444,6 @@ ggplot(Observed_Het_per_locus_melt,aes(x = SNP_ID, y= value, fill=variable)) + g
 ```                                                                                                               
 
 
+=======
+The graphs generated are located in outputGraphs
+>>>>>>> edafa29eca68075fbea005bf968ed0d12fb290e2
