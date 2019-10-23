@@ -21,8 +21,8 @@ When you click the **Knit** button a document will be generated that includes bo
 
 summary(cars)
 #created by Zach
-
-" PART 1"
+````
+# PART 1
 
   "Data Inspection"
 "Load tidyverse"
@@ -57,24 +57,27 @@ str(snps)
 head(fang)
 head(snps)
 
-"After inspecting the files, i observed the following"
-*fang_et_al_genotypes.txt*
+## After inspecting the files, i observed the following
+
+#fang_et_al_genotypes.txt
+
 Size: 11.05MB
 This file has 986 colums and 2782 rowsum;
 This file has 16 Groups in the Group column:
 Based on the head command, genotypes has missing values coded with '?
 
-*snp_position.txt*
+## snp_position.txt
+
 This file is 82.76KB 
 It has 986 rows and 15 columns
 This file has 339 candidates and 644 random SNPS. 
 SNP Position has column names for SNP ID, marker ID, Chromosome, Position, alternative and multiple positions, amplicon, feature name, gene'
 
 
-"PART 2"
-'Data Processing'
+#PART 2
+#Data Processing
   
-'1. Subset the fang genotypes dataframe into two objects, one for maize (ZMMIL, ZMMLR, and ZMMMR) and one for teosinte (ZMPBA, ZMPIL, and ZMPJA)**  
+#1. Subset the fang genotypes dataframe into two objects, one for maize (ZMMIL, ZMMLR, and ZMMMR) and one for teosinte (ZMPBA, ZMPIL, and ZMPJA)**  
   
   *Select Maize or Teosinte Groups based on Group column*
 
@@ -87,7 +90,8 @@ row.names(maizegenotypes) <- maizegenotypes[,1]
 teosintegenotypes <- fang[fang$Group %in% teosintegroup, ]
 row.names(teosintegenotypes) <- teosintegenotypes[,1]
 
-**2. Remove extraneous columns in maizegenotypes and teosintegenotypes dataframes (Sample_ID, JG_OTU, and Group). We just want the names of the SNPs and the data.**  
+```
+# Next, remove extraneous columns in maizegenotypes and teosintegenotypes dataframes (Sample_ID, JG_OTU, and Group). We just want the names of the SNPs and the data.**  
   
   
   ```{r}
@@ -97,12 +101,13 @@ cutmaizegenotypes <- maizegenotypes[,-1:-3]
 cutteosintegenotypes <- teosintegenotypes[,-1:-3]
 
 ```
-**3. Remove extraneous columns in the snp position dataframe (cdv marker ID and everything after position).** 
+#Remove extraneous columns in the snp position dataframe (cdv marker ID and everything after position).** 
   ```{r}
 
 cutposition <-snps[, c("SNP_ID","Chromosome","Position")]
+```
 
-**4. Transpose the genotypes dataframes, making sure that the final result is a dataframe**  
+#Transpose the genotypes dataframes, making sure that the final result is a dataframe**  
   
   ```{r}
 
@@ -113,13 +118,13 @@ transposedteosinte <- as.data.frame(t(cutteosintegenotypes))
 is.data.frame(transposedmaize)
 
 is.data.frame(transposedteosinte)
-
-**5.Sort the genotype and SNP position dataframes by the SNP name, the column that the two files have in common.**  
+```
+#Next, sort the genotype and SNP position dataframes by the SNP name, the column that the two files have in common.**  
   
   
   
   ```{r}
-
+```
 sortedposition <- cutposition[order(cutposition$SNP_ID),] #sort by SNP_ID
 
 SNPstransposedmaize <- cbind(SNP_ID = rownames(transposedmaize), transposedmaize) 
@@ -139,12 +144,12 @@ sortedteosinte <- SNPstransposedteosinte[order(SNPstransposedteosinte$SNP_ID),] 
 ```
 
 
-
+```
 
 
 **6. Join the sortedposition dataframe to each of the genotype dataframes using SNP_ID**
   
-  
+  ```
   
   ```{r}
 
@@ -161,15 +166,15 @@ joinedteosinte <- merge(sortedposition, sortedteosinte, by.x="SNP_ID", by.y="SNP
 ```
 
 
+```
 
 
-
-**7. Now isolate each chromosome and sort by position. For the first 10 files, we need 1 for each chromosome with SNPs ordered by increasing position values and missing data shown by '?'. To do this, first order the datasets by increasing position**  
+##Now isolate each chromosome and sort by position. For the first 10 files, we need 1 for each chromosome with SNPs ordered by increasing position values and missing data shown by '?'. To do this, first order the datasets by increasing position**  
   
   
   
   ```{r}
-
+```
 library(gtools)
 
 orderedmaizeincrease <- joinedmaize[mixedorder(joinedmaize$snps),] 
@@ -178,11 +183,10 @@ orderedmaizeincrease <- joinedmaize[mixedorder(joinedmaize$snps),]
 orderedteosinteincrease <- joinedteosinte[mixedorder(joinedteosinte$Position),]
 
 ```
+```
 
 
-
-**8. It is also necessary to write  a function to  pull out each chromosome and write them to a file using the package dplyr** This was already loaded in tydiverse
-  
+##It is also necessary to write  a function to  pull out each chromosome and write them to a file using the package dplyr** This was already loaded in tydiverse
   
   
   ```{r}
@@ -212,14 +216,13 @@ MaizeChromosomeQ %>%
   group_by(Chromosome) %>% 
   
   do(filewriteMQ(.)) #this is the dplyr piping of the dataframe to a grouping function, and then the files are written for each group
-
-`
-
+```
 
 
 
 
-**9. I did the same for teosinte, writing a modified function to change the filenames**
+
+##I did the same for teosinte, writing a modified function to change the filenames**
   
   
   
@@ -251,7 +254,7 @@ TeosinteChromosomeQ %>%
 
 
 
-**10. For the next ten files of maize and teosinte with '-' denoting missing values:**
+##For the next ten files of maize and teosinte with '-' denoting missing values:**
   
   
   
@@ -263,21 +266,18 @@ missingvalueteosinte <- as.data.frame(lapply(joinedteosinte, function(x) {gsub("
 
 ```
 
-
-
-
-
-**11. I sorted the files by decreasing order:**
+##I sorted the files by decreasing order:**
   
-  
-  
-  ```{r}
+    ```{r}
 
-orderedmaizedecrease <- missingvaluemaize[mixedorder(as.character(missingvaluemaize$Position), decreasing=TRUE),] #order the dataset by decreasing position
+orderedmaizedecrease <- missingvaluemaize[mixedorder(as.character(missingvaluemaize$Position), decreasing=TRUE),] 
+
+
+#order the dataset by decreasing position
 
 orderedteosintedecrease <- missingvalueteosinte[mixedorder(as.character(missingvalueteosinte$Position), decreasing=TRUE),]
 
-**12. UNext, using the function from before, I pulled out each chromosome and created a file for maize chromosomes.**
+##UNext, using the function from before, I pulled out each chromosome and created a file for maize chromosomes.**
   
   
   
@@ -309,7 +309,7 @@ MaizeChromosomeD %>%
 
 
 
-**13. Same for teosinte:** 
+##Same for teosinte:** 
   
   
   
@@ -451,13 +451,4 @@ ggplot(Observed_Het_per_locus_melt,aes(x = SNP_ID, y= value, fill=variable)) + g
 
 ```                                                                                                               
 
-#Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-ggplot(Observed_Het_per_locus_melt,aes(x = SNP_ID, y= value, fill=variable)) + geom_point()
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
